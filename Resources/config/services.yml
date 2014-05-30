@@ -1,0 +1,6 @@
+parameters:
+    phpexcel.class:  Tecno-Soluciones\WordBundle\Factory
+
+services:
+    phpword:
+      class: %phpword.class%
