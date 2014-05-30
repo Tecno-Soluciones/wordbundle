@@ -30,7 +30,25 @@
         "symfony/browser-kit": "~2.1",
         "sensio/framework-extra-bundle": "~2.1"
     },
-
+	"repositories": [
+    {
+        "type": "package",
+        "package": {
+            "name": "tecno-soluciones/wordbundle",
+            "version": "dev-master",
+            "source": {
+                "url": "git://github.com/tecno-soluciones/wordbundle.git",
+                "type": "git",
+                "reference": "master"
+            },
+            "autoload": {
+                "psr-0" : {
+                    "Tecno\\WordBundle" : "src"
+                }
+            }
+        }
+    }
+],
     "autoload": {
         "psr-0": {
             "Tecno\\WordBundle": ""
