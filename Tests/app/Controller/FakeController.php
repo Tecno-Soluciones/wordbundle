@@ -1,6 +1,6 @@
 <?php
 
-namespace  Liuggio\ExcelBundle\Controller;
+namespace  Tecno\WordBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,12 +12,12 @@ class FakeController extends Controller
         // create an empty object
         $phpExcelObject = $this->createXSLObject();
         // create the writer
-        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+        $writer = $this->get('phpword')->createWriter($phpExcelObject, 'Excel5');
         // create the response
-        $response = $this->get('phpexcel')->createStreamedResponse($writer);
+        $response = $this->get('phpword')->createStreamedResponse($writer);
         // adding headers
-        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
-        $response->headers->set('Content-Disposition', 'attachment;filename=stream-file.xls');
+        $response->headers->set('Content-Type', 'text/vnd.ms-word; charset=utf-8');
+        $response->headers->set('Content-Disposition', 'attachment;filename=stream-file.dos');
         $response->headers->set('Pragma', 'public');
         $response->headers->set('Cache-Control', 'maxage=1');
 
@@ -27,9 +27,9 @@ class FakeController extends Controller
     public function storeAction()
     {
         // create an empty object
-        $phpExcelObject = $this->createXSLObject();
+        $phpExcelObject = $this->createDOCObject();
         // create the writer
-        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+        $writer = $this->get('phpword')->createWriter($phpExcelObject, 'Word2007');
         $filename = tempnam(sys_get_temp_dir(), 'xls-') . '.xls';
         // create filename
         $writer->save($filename);
@@ -41,10 +41,10 @@ class FakeController extends Controller
     {
         $filename = $this->container->getParameter('xls_fixture_absolute_path');
         // create an object from a filename
-        $phpExcelObject = $this->createXSLObject($filename);
+        $phpExcelObject = $this->createDOCObject($filename);
         // create the writer
-        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
-        $filename = tempnam(sys_get_temp_dir(), 'xls-') . '.xls';
+        $writer = $this->get('phpword')->createWriter($phpExcelObject, 'Word2007');
+        $filename = tempnam(sys_get_temp_dir(), 'doc-') . '.doc';
         // create filename
         $writer->save($filename);
 
@@ -55,23 +55,27 @@ class FakeController extends Controller
      * utility class
      * @return mixed
      */
-    private function createXSLObject()
+    private function createDOCObject()
     {
-        $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+        $phpExcelObject = $this->get('phpword')->createPHPExcelObject();
 
-        $phpExcelObject->getProperties()->setCreator("liuggio")
-            ->setLastModifiedBy("Giulio De Donato")
-            ->setTitle("Office 2005 XLSX Test Document")
-            ->setSubject("Office 2005 XLSX Test Document")
-            ->setDescription("Test document for Office 2005 XLSX, generated using PHP classes.")
-            ->setKeywords("office 2005 openxml php")
-            ->setCategory("Test result file");
-        $phpExcelObject->setActiveSheetIndex(0)
-            ->setCellValue('A1', 'Hello')
-            ->setCellValue('B2', 'world!');
-        $phpExcelObject->getActiveSheet()->setTitle('Simple');
-        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
-        $phpExcelObject->setActiveSheetIndex(0);
+		$section = $phpExcelObject->createSection();
+		
+        $section->addText('Hello world!');
+
+		// You can directly style your text by giving the addText function an array:
+		$section->addText('Hello world! I am formatted.', array('name'=>'Tahoma', 'size'=>16, 'bold'=>true));
+
+		// If you often need the same style again you can create a user defined style to the word document
+		// and give the addText function the name of the style:
+		$PHPWord->addFontStyle('myOwnStyle', array('name'=>'Verdana', 'size'=>14, 'color'=>'1B2232'));
+		$section->addText('Hello world! I am formatted by a user defined style', 'myOwnStyle');
+
+		// You can also putthe appended element to local object an call functions like this:
+		$myTextElement = $section->addText('Hello World!');
+		$myTextElement->setBold();
+		$myTextElement->setName('Verdana');
+		$myTextElement->setSize(22);
 
         return $phpExcelObject;
     }

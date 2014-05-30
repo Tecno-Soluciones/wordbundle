@@ -1,5 +1,5 @@
 parameters:
-    phpexcel.class:  Tecno-Soluciones\WordBundle\Factory
+    phpword.class:  Tecno\WordBundle\Factory
 
 services:
     phpword:
