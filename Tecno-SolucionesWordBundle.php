@@ -1,9 +1,9 @@
 <?php
 
-namespace Liuggio\ExcelBundle;
+namespace Tecno\WordBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class LiuggioExcelBundle extends Bundle
+class TecnoWordBundle extends Bundle
 {
 }

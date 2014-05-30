@@ -1,6 +1,6 @@
 <?php
 
-namespace Tecno-Soluciones\WordBundle;
+namespace Tecno\WordBundle;
 
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
